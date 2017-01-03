@@ -69,3 +69,28 @@ piwikTracker.enableLinkTracking();
 </script><noscript><p><img src="http://{/literal}{$SwagPiwik.p_url}{literal}piwik.php?idsite={/literal}{$SwagPiwik.p_ID}{literal}" style="border:0" alt="" /></p></noscript>
 {/literal}
 {/block}
+
+
+{*  --------------- JH: AJAX CART -------------- *}
+{block name='frontend_checkout_ajax_cart_item_container' append}
+
+            {literal}
+                <script type="text/javascript">
+            {/literal}
+
+        {foreach from=$sBasket.content item=sBasketItem}{if !$sBasketItem.modus}
+
+            {literal}
+            piwikTracker.addEcommerceItem(
+            "{/literal}{$sBasketItem.ordernumber}{literal}", "{/literal}{$sBasketItem.articlename|escape:'javascript'}{literal}", "-", {/literal}{$sBasketItem.priceNumeric|round:2}, {$sBasketItem.quantity}{literal}
+            );
+            {/literal}
+        {/if}{/foreach}
+
+       {literal}
+        piwikTracker.trackEcommerceCartUpdate({/literal}{$sAmount}{literal});
+       {/literal}
+       </script>
+        {assign var="dbg" value="ajaxcart-end"}
+
+{/block}
